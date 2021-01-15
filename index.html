@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+        integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
+        crossorigin="anonymous"></script>
+
+    <script src="https://kit.fontawesome.com/c9bd0a09ba.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="style.css">
+    <title>Weather Dashboard</title>
+</head>
+
+<body>
+    <div class="top-container">
+        <h1 style="text-align: center;">Weather Dashboard</h1>
+    </div>
+    <div class="sidebar">
+        <div class="search" style="padding-left: 10px;">
+            <h4 style="padding-top: 10px; text-align: center;">Search For a City</h4>
+            <div class="input-container">
+                <input type="text" id="city" class="form-control form-control-sm" placeholder="Dallas">
+                <button id="search" class="btn btn-sm"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+
+        <div class="search-history">
+
+        </div>
+
+    </div>
+
+    <div class="city-container rounded">
+        <h2 class="city-name">City Name </h2>
+        <h2 class="date">(1/1/2021)</h2>
+
+        <p class="stat">Temperature: <span id="temp">99</span>&deg;F</p>
+        <p class="stat">Humidity: <span id="humid">41</span>%</p>
+        <p class="stat">Wind Speed: <span id="wind">4.7</span>mph</p>
+        <p class="stat">UV Index:
+            <span id="uv" class="rounded">9.49</span>
+        </p>
+
+    </div>
+
+    <div class="forecast rounded">
+        <h2>5-Day Forecast</h2>
+        <div class="card-container">
+        </div>
+    </div>
+
+    <script>
+        var long, lat;
+        $(document).ready(function () {
+
+            getSimple("Dallas");
+
+            var search = $("#search").click(function () {
+                var city = $("#city").val();
+                $("#city").val("");
+                getSimple(city);
+                $(".search-history").append(/*html*/ `
+                    <div class="searched rounded">
+                        <h5 class="searched-city" data-city="${city}">${city}</h5>
+                    </div>
+                `)
+
+            });
+
+            $(".search-history").on("click", ".searched-city", function () {
+                var city = $(this).text();
+                getSimple(city);
+            });
+
+            function getSimple(city) {
+
+                $(".city-name").text(city);
+
+
+                var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=83cf1afe0f238ef94012fade4104df84"
+
+                $.ajax({
+                    method: "GET",
+                    url: queryURL
+                }).then(function (response1) {
+                    $("#temp").text(Math.round(response1.main.temp));
+                    $("#humid").text(response1.main.humidity);
+                    $("#wind").text(response1.wind.speed);
+                    long = response1.coord.lon;
+                    lat = response1.coord.lat;
+                    getAdvanced(response1);
+
+                })
+
+
+            }
+
+            function getAdvanced(response1) {
+                var queryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + response1.coord.lat + "&lon=" + response1.coord.lon + "&units=imperial&exclude=current,minutely,hourly,alerts&appid=83cf1afe0f238ef94012fade4104df84"
+
+                $.ajax({
+                    method: "GET",
+                    url: queryURL,
+                }).then(function (response) {
+                    var uv = response.daily[0].uvi;
+                    var $uv = $("#uv");
+                    $(".date").text(moment.unix(response.daily[0].dt).format("(M/DD/YYYY)"))
+                    $uv.text(uv);
+
+                    if (uv <= 2) {
+                        $uv.addClass("low")
+                    }
+                    else if (uv > 2 && uv <= 5) {
+                        $uv.addClass("moderate")
+                    }
+                    else if (uv > 5 && uv <= 7) {
+                        $uv.addClass("high")
+                    }
+                    else if (uv > 7 && uv <= 10) {
+                        $uv.addClass("very-high")
+                    }
+                    else {
+                        $uv.addClass("extreme")
+                    }
+
+                    $(".card-container").empty();
+                    for (var i = 1; i <= 5; i++) {
+                        var icon = "http://openweathermap.org/img/wn/" + response.daily[i].weather[0].icon + ".png"
+                        $(".card-container").append(/*html*/
+                            `<div class="fore-card rounded">
+                                <h4 class="fore-date">${moment.unix(response.daily[i].dt).format("MM/DD/YYYY")}</h4>
+                                <img src="${icon}">
+                                <p>Temp: <span id="fore-tmp-1">${Math.round(response.daily[i].temp.day)}&degF</span></p>
+                                <p>Humidity: <span id="fore-tmp-1">${response.daily[i].humidity}%</span></p>
+                            </div>`
+                        )
+                    }
+
+                })
+            }
+        })
+
+
+    </script>
+</body>
+
+</html>

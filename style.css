@@ -1,0 +1,139 @@
+.top-container{
+    padding: 40px;
+    background-color: rgb(0, 46, 46);
+    width: 100%;
+}
+
+.top-container h1{
+    color: white;
+    font-size: 72px;
+}
+
+.city-container{
+    background-color: rgb(207, 210, 205);
+    height: 400px;
+    width: 60%;
+    float: left;
+    margin-top: 45px;
+    margin-left: 75px;
+    font-size: 21px;
+}
+
+#uv{
+    padding:5px;
+}
+
+.low{
+    background-color: lime;
+}
+
+.moderate{
+    background-color: yellow;
+}
+
+.high{
+    background-color: orange;;
+}
+
+.very-high{
+    background-color: red;
+}
+
+.extreme{
+    background-color: magenta;
+}
+
+h2{
+    margin-left: 25px;
+    margin-top: 10px;
+}
+
+.date{
+    float: left;
+}
+
+.city-name{
+    float:left;
+}
+
+.stat{
+    margin-left: 25px;
+    padding-top: 25px;
+    clear:both;
+}
+
+.forecast{
+    background-color: rgb(207, 210, 205);
+    height: 250px;
+    width: 60%;
+    margin-top: 45px;
+    margin-left: 75px;
+    float: left;
+}
+
+.fore-card{
+    background-color: rgb(0, 46, 46);
+    height: 175px;
+    width: 125px;
+    margin-left: 50px;
+    margin-right: 50px;
+    float:left;
+    color: white;
+    text-align: center;
+}
+
+.fore-card i{
+    margin: 5px;
+}
+
+.sidebar{
+    margin-top: 45px;
+    background-color: rgb(207, 210, 205);
+    height: 550px;
+    width: 300px;
+    margin-left: 25px;
+    border-radius: 5px;
+    float: left;
+}
+
+.sidebar input{
+    float: left;
+    width: 175px;
+}
+
+.search-history{
+    margin: 25px;    
+    height: auto;
+}
+.searched{
+    height: 50px;
+    width: 100%;
+    background-color: white;
+    border: rgb(116, 116, 116) solid 2px;
+    margin-bottom: -5px;
+}
+
+.searched-city{
+    padding-top: 10px;
+    margin-left: 10px;
+}
+
+.searched-city:hover{
+    cursor: pointer;
+}
+
+
+.btn{
+    background-color: rgb(0, 46, 46);
+    margin-left: 4px;
+}
+.sidebar i{
+    float: left;
+    height: 19px;
+    margin-top: 2px;
+    color:ghostwhite;
+}
+
+.input-container{
+    margin-left: 31px;
+}
