@@ -1,11 +1,21 @@
 var long, lat;
-getSimple("Dallas");
+if (!localStorage.getItem("lastSearched")) {
+    var lastSearched = "";
+    getSimple("Dallas");
+
+}
+else {
+    var lastSearched = localStorage.getItem("lastSearched");
+    getSimple(lastSearched);
+
+}
 
 $(document).ready(function () {
 
 
     var search = $("#search").click(function () {
         var city = $("#city").val();
+        localStorage.setItem("lastSearched", city);
         $("#city").val("");
         getSimple(city);
         $(".search-history").append(/*html*/ `
